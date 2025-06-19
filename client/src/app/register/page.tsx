@@ -60,7 +60,6 @@ const Register = () => {
     
     console.log('Registration form submitted:', values);
     axios.post('http://localhost:8080/register', values)
-
     setTimeout(() => {
       alert('Account Created Successfully! Welcome! Your account has been created.');
       setSubmitting(false);
