@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 
 interface RegisterFormValues {
@@ -56,12 +57,12 @@ const Register = () => {
     confirmPassword: '',
   };
 
-  const handleSubmit = (values: RegisterFormValues, { setSubmitting }: any) => {
+  const handleSubmit = async (values: RegisterFormValues, { setSubmitting }: any) => {
     
-    console.log('Registration form submitted:', values);
-    axios.post('http://localhost:8080/register', values)
+    const {data} = await axios.post('http://localhost:8080/register', values);
+    toast(data);
     setTimeout(() => {
-      alert('Account Created Successfully! Welcome! Your account has been created.');
+      toast('Account Created Successfully! Welcome! Your account has been created. ✅');
       setSubmitting(false);
     }, 1000);
   };
