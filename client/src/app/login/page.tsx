@@ -7,7 +7,8 @@ import { Eye, EyeOff, BookOpen, Mail, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/ui/label";
+import Image from "next/image"
 
 // Yup validation schema
 const loginSchema = Yup.object().shape({
@@ -44,16 +45,19 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md ">
         {/* Logo/Brand Section */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-black p-3 rounded-full">
-              <BookOpen className="h-8 w-8 text-white" />
-            </div>
+        <div className="text-center ">
+          <div className="flex justify-center items-center mb-4">
+            <Image
+              src="/logo.png"
+              width={200}
+              height={150}
+              alt="pustakSansar logo"
+              className="object-contain"
+            />
           </div>
-          <h1 className="text-3xl font-bold text-black">pustakSansar</h1>
-          <p className="text-gray-600 mt-2">Your Digital Book Universe</p>
+          <p className="text-gray-600 text-lg ">Your Digital Book Universe</p>
         </div>
 
         <Card className="shadow-xl border border-gray-200 bg-white">
