@@ -7,17 +7,46 @@ import User from '../models/user.js'
 const userRouter = Router();
 
 userRouter.post('/register', async (req, res) => {
-    //check if email already exist
-    const user = await User.findOne({email: req.body.email})
-    if(user) return res.send('user already exists')
-    else {
-    //hasing for password
-    req.body.password = await bcrypt.hash(req.body.password, saltRounds);
-    //create the user in the db
-    User.create(req.body)}
-    return res.send('user registered');
-    
+    // step 1:check if email already exist
+    try{
+        const user = await User.findOne({email: req.body.email});
+        if(user){
+            return res.status(400).json
+            ({success: false, message: 'User already exists'});
+        }
+
+        // step 2: hash the password
+        const hashedPassoword = await bcrypt.hash(req.body.password, saltRounds);
+
+        await User.create(req.body)
+
+        // step 3: Create user with hased passowrd
+
+        const newUser = await User.create({
+            ...req.body,
+            password: hashedPassoword,
+        })
+        // Step 4: Send success response
+    return res.status(201).json({
+      success: true,
+      message: "User registered successfully. Please log in.",
+      user: {
+        _id: newUser._id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        phone: newUser.phone,
+      },
+    });
+  } catch (error) {
+    console.error("Register error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
 });
+   
 
 userRouter.post('/login', async (req, res) => {
     // step 1: email should exist

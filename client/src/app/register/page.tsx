@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 
 interface RegisterFormValues {
@@ -46,6 +47,8 @@ const validationSchema = Yup.object({
 });
 
 const Register = () => {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -58,13 +61,25 @@ const Register = () => {
   };
 
   const handleSubmit = async (values: RegisterFormValues, { setSubmitting }: any) => {
-    
+    try{
     const {data} = await axios.post('http://localhost:8080/register', values);
-    toast(data);
-    setTimeout(() => {
-      toast('Account Created Successfully! Welcome! Your account has been created. ✅');
+    
+      if(data.success){
+        toast.success('Account created successfully! Redirecting to login page.')
+        router.push('/login');
+      } else {
+        toast.error(data.message || 'Something went wrong!');
+      }
+    }
+     catch(error: any)
+    {
+      toast.error(error?.response?.data?.message||'Something went wrong')
+    } 
+    finally
+    {
       setSubmitting(false);
-    }, 1000);
+    }
+    
   };
 
   return (
