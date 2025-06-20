@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label";
 import Image from "next/image"
+import axios from "axios";
+import { toast } from 'sonner';
 
 // Yup validation schema
 const loginSchema = Yup.object().shape({
@@ -30,12 +32,15 @@ export default function LoginPage() {
   }
 
   const handleSubmit = async (values: LoginFormValues, { setSubmitting }: any) => {
+
+    const {data} = await axios.post('http://localhost:8080/login', values)
+    toast(data?.message);
     try {
 
       console.log("Login attempt:", values)
       await new Promise((resolve) => setTimeout(resolve, 1000))
       
-      alert("Login successful!")
+      toast("Login successful!")
     } catch (error) {
       console.error("Login error:", error)
     } finally {
