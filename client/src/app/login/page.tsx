@@ -39,14 +39,14 @@ export default function LoginPage() {
   const handleSubmit = async (values: LoginFormValues, { setSubmitting }: any) => {
     try {
     const {data} = await axios.post('http://localhost:8080/login', values)
-
+      if(data?.isLoggedIn)  router.push('/');
       if (data?.message === "Invalid Password" || data?.message === "Email not found") {
         toast.error(data.message)
       } else {
         toast.success("Login successful!")
   
       }
-      if(data?.isLoggedIn)  router.push('/');
+     
 
     } catch (error) {
       console.error("Login error:", error)
