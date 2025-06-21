@@ -11,12 +11,15 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image"
 import axios from "axios";
 import { toast } from 'sonner';
+import { useRouter } from "next/navigation"
 
 // Yup validation schema
 const loginSchema = Yup.object().shape({
   email: Yup.string().email("Please enter a valid email address").required("Email is required"),
   password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
 })
+
+
 
 interface LoginFormValues {
   email: string
@@ -25,6 +28,8 @@ interface LoginFormValues {
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter();
+
 
   const initialValues: LoginFormValues = {
     email: "",
@@ -32,19 +37,24 @@ export default function LoginPage() {
   }
 
   const handleSubmit = async (values: LoginFormValues, { setSubmitting }: any) => {
-
-    const {data} = await axios.post('http://localhost:8080/login', values)
-    toast(data?.message);
     try {
+    const {data} = await axios.post('http://localhost:8080/login', values)
 
-      console.log("Login attempt:", values)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      
-      toast("Login successful!")
+      if (data?.message === "Invalid Password" || data?.message === "Email not found") {
+        toast.error(data.message)
+      } else {
+        toast.success("Login successful!")
+  
+      }
+      if(data?.isLoggedIn)  router.push('/');
+
     } catch (error) {
       console.error("Login error:", error)
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setSubmitting(false)
+    
+      
     }
   }
 
