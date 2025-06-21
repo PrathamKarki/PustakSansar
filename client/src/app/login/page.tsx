@@ -12,6 +12,8 @@ import Image from "next/image"
 import axios from "axios";
 import { toast } from 'sonner';
 import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { addLoginDetails } from "@/redux/reducerSlices/userSlice"
 
 // Yup validation schema
 const loginSchema = Yup.object().shape({
@@ -36,6 +38,8 @@ export default function LoginPage() {
     password: "",
   }
 
+  const dispatch = useDispatch()
+
   const handleSubmit = async (values: LoginFormValues, { setSubmitting }: any) => {
     try {
     const {data} = await axios.post('http://localhost:8080/login', values)
@@ -45,6 +49,10 @@ export default function LoginPage() {
       } else {
         toast.success("Login successful!")
   
+      }
+
+      if(data) {
+        dispatch(addLoginDetails(data))
       }
      
 
