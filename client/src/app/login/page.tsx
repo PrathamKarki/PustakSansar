@@ -14,6 +14,8 @@ import { toast } from 'sonner';
 import { useRouter } from "next/navigation"
 import { useDispatch } from "react-redux"
 import { addLoginDetails } from "@/redux/reducerSlices/userSlice"
+import dotenv from 'dotenv'
+dotenv.config();
 
 // Yup validation schema
 const loginSchema = Yup.object().shape({
@@ -42,7 +44,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (values: LoginFormValues, { setSubmitting }: any) => {
     try {
-    const {data} = await axios.post('http://localhost:8080/login', values)
+    const {data} = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/login', values)
       if(data?.isLoggedIn)  router.push('/');
       if (data?.message === "Invalid Password" || data?.message === "Email not found") {
         toast.error(data.message)
