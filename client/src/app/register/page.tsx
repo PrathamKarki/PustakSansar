@@ -12,6 +12,8 @@ import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import dotenv from 'dotenv'
+dotenv.config();
 
 
 interface RegisterFormValues {
@@ -62,7 +64,7 @@ const Register = () => {
 
   const handleSubmit = async (values: RegisterFormValues, { setSubmitting }: any) => {
     try{
-    const {data} = await axios.post('http://localhost:8080/register', values);
+    const {data} = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/register', values);
     
       if(data.success){
         toast.success('Account created successfully! Redirecting to login page.')
