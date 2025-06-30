@@ -41,7 +41,6 @@ userRouter.post("/register", async (req, res) => {
         email: newUser.email,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
-        phone: newUser.phone,
       },
     });
   } catch (error) {
